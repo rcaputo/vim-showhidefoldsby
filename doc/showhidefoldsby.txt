@@ -1,0 +1,128 @@
+*showhidefoldsby.txt*	For Vim version 7.4.  Last change: 2018 Jan 22
+
+ShowHideFoldsBy 0.0.0 (unreleased)
+
+This is a library of functions that can show and hide folds by various
+criteria.
+
+It is currently very incomplete, as it's been written to scratch a
+particular itch that has currently stopped itching.  If someone has a
+similar itch, I invite them to submit a pull request with their
+scratch.  See |showhidefoldsby-contributing| for details.
+
+  Installing   |showhidefoldsby-installing|
+  Usage        |showhidefoldsby-usage|
+  Functios     |showhidefoldsby-functions|
+  License      |showhidefoldsby-license|
+  Contributing |showhidefoldsby-contributing|
+
+==============================================================================
+                                                    *showhidefoldsby-installing*
+Installing~
+
+This library contains two subdirectories: doc, and autoload.  Place them into
+your vim 'runtimepath'.  Pathogen, Vundle, etc. may make this easier to
+manage.
+
+==============================================================================
+                                                         *showhidefoldsby-usage*
+Usage~
+
+This library provides a way to switch a buffer's view between different
+contexts based on foldable highlight groups.
+
+The original purpose was to mitigate the disruption of flow in program sources
+that interleave documentation and code.
+
+For example, in a Perl buffer, this command will open all Perl subroutine
+folds and hide all the rest:
+
+  :call showfoldsby#HighlightGroup('perlSubFold')
+
+This opens all Perl documentation folds and hides all the rest:
+
+  :call showfoldsby#HighlightGroup('perlPOD')
+
+These can be mapped to keystrokes:
+
+  " Focus on the documentation.
+  autoload FileType perl
+    \ nnoremap <silent> z1
+    \ :call showfoldsby#HighlightGroup('perlPOD')<CR>
+
+  " Focus on the code.
+  autoload FileType perl
+    \ nnoremap <silent> z2
+    \ :call showfoldsby#HighlightGroup('perlSubFold')<CR>
+
+==============================================================================
+                                                     *showhidefoldsby-functions*
+Public Functions~
+
+Public functions are implemented in showfoldsby.vim and hidefoldsby.vim.
+
+                                                                *HighlightGroup*
+showfoldsby#HighlightGroup~
+
+Open all folds tagged with the specified highlight group.  All folds that do
+not have the highlight group will be folded.
+
+  :call showfoldsby#HighlightGroup('perlSubFold')
+
+There currently is no hidefoldsby#HighlightGroup(), but the library naming
+scheme has been designed to support its addition if/when someone needs it.
+
+------------------------------------------------------------------------------
+Private Functions~
+
+Private functions are implemented in showhidefoldsby.vim.  They're documented
+here for convenience.
+
+                                                                     *SaveState*
+SaveState~
+
+Save the state of the window and buffer, and clear the visual and audible
+bells.  The state can be restored with |RestoreState|.
+
+Functions showing and hiding folds over an entire buffer have a tendency to
+ring the terminal bell at EOF.  Temporarily clearing and restoring the visual
+and audible bell states works around this problem.
+
+Calling SaveState() twice in succession will cause the previous saved state to
+be lost.  Re-entrancy isn't currently needed, otherwise this limitation would
+be an issue.
+
+                                                                  *RestoreState*
+RestoreState~
+
+Restore state that was previously saved with SaveState().  Puts the cursor
+back to its previously saved place in the window and buffer.  Restores the
+terminal visual and audible bell states.  Unlets the saved-state variables.
+
+==============================================================================
+                                                       *showhidefoldsby-license*
+License~
+
+This plugin and its documentation are free but licensed under the Creative
+Commons BY-NC-SA 4.0 (Attribution-NonCommerical-ShareAloke 4.0 International).
+
+The tldr is at https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+Sorry if that's a bummer.
+
+==============================================================================
+                                                  *showhidefoldsby-contributing*
+Contributing~
+
+https://github.com/rcaputo/vim-showhidefoldsby is the canonical repository for
+this plugin.  Please use that account as the point of contact for support and
+submitted contributions.
+
+Improvements to the existing code will be considered on the basis of
+correctness, efficiency, and clarity, mostly in that order.
+
+All contributions must be made under the same license as this plugin.
+If no license is specified, it will be assumed to be the same as this plugin.
+Proper attribution will be given to the contributor, if possible.
+
+vim:tw=78:ft=help:norl:expandtab:
