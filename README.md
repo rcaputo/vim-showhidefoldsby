@@ -1,4 +1,4 @@
-ShowHideFoldsBy 0.0.0 (unreleased)
+ShowHideFoldsBy 1.0.0
 
 This is a library of Vim functions that can show and hide folds by various criteria.
 
